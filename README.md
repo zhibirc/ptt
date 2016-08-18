@@ -92,11 +92,13 @@ while (n--) {
  testVal++;
 }
 ```
+Link: http://jsperf.com/duffs-device
 
-Link:
-http://jsperf.com/duffs-device
+- Use `Date.now()` instead of `+new Date` or `(new Date).getTime()`
 
-- For clearing arrays use `array.length = `0, not `array.splice(0)`
+- Don’t use the `with()` statement
+
+- For clearing arrays use `array.length = 0`, not `array.splice(0)`
 
 ### Additional literature
 
