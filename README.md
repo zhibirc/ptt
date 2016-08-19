@@ -100,6 +100,8 @@ Link: http://jsperf.com/duffs-device
 
 - For clearing arrays use `array.length = 0`, not `array.splice(0)`
 
+- Keep in mind differences in performance of `textContent` and `innerText`, test them before use
+
 ### Additional literature
 
 Stoyan Stefanov "JavaSctipt Design Patterns"
