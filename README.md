@@ -53,7 +53,7 @@ var obj = Object.create(null);
 	
 - for-in loop is very, very slow, use `Object.keys` + `forEach`/`for`/`while`
 	
-- Use bitwise operators ( 4 / 2 === 4 >> 1, 4 * 2 === 4 << 1, ~~ for rounding etc.). It may be less readable but sometimes increase performance
+- Use bitwise operators ( `4 / 2 === 4 >> 1`, `4 * 2 === 4 << 1`, `~~` for rounding etc.). It may be less readable but sometimes increase performance
 	
 - Avoid using captured groups in regular expressions if you don't want to save result of matching,
 use `(?:)` - non-capturing groups instead
