@@ -120,6 +120,7 @@ Link: http://jsperf.com/duffs-device
 
 - For clearing arrays use `array.length = 0`, not `array.splice(0)`
 
+<<<<<<< HEAD
 - Define arrays for HTML collection objects
 As the DOM Level 1 spec says, "collections in the HTML DOM are assumed to be live, meaning that they are automatically updated when the underlying document is changed". 
 HTML collection objects are extremely slow, so use any valid technique to minimize amount of operations with them.
@@ -127,6 +128,9 @@ HTML collection objects are extremely slow, so use any valid technique to minimi
 - Don't touching the DOM without real necessity, use `documentFragment` or other technique which minimize amount of _reflows_
 
 - Use CSS classes instead of individual styles to change a number of styles at once, which incurs a single _reflow_
+=======
+- Keep in mind differences in performance of `textContent` and `innerText`, test them before use
+>>>>>>> 6ce2370da155868bb41ac11702e215c4c9c64b0f
 
 ### Additional literature
 
