@@ -83,11 +83,23 @@ console.log(map[weight]);
 
 - Prefer `call` rather than `apply`, as `call` is slightly faster
 
-- Use cloning objects istead of creating (`element.cloneNode()` instead of `document.createElement(element)`)
-
-Link:
+- Use cloning objects istead of creating (`element.cloneNode()` instead of `document.createElement(element)`). Links:
 https://github.com/spicyj/innerhtml-vs-createelement-vs-clonenode
 https://jsperf.com/clonenode-vs-createelement-performance/58
+
+- Avoid performance pitfalls with _long running scrips_ with the following technique (use this if the loop doesn't have to execute synchronously and 
+the order in which the loop’s data is processed in no matter:
+
+```javascript
+function listAsyncExec (list, executor, interval, context) {
+    var list = list.slice();
+    setTimeout(function _() {
+        executor.call(context, list.shift());
+        
+        list.length && setTimeout(_, interval);
+    }, interval);
+}
+```
 
 - Multiplication is faster than division in some cases, so you can increase performance of expression (`n / 8`) with (`n * 0.125`)
 
@@ -127,6 +139,22 @@ HTML collection objects are extremely slow, so use any valid technique to minimi
 - Don't touching the DOM without real necessity, use `documentFragment` or other technique which minimize amount of _reflows_
 
 - Use CSS classes instead of individual styles to change a number of styles at once, which incurs a single _reflow_
+
+- If it's necessary to define sufficient amount of styles in runtime the approach below is appropriate (or use external CSS file via `link`):
+
+```javascript
+var css = document.createElement('style'),
+    styles = '#header { color: #555 }';
+    
+css.media = 'screen'; // if necessary
+styles += ' #content { color: #333; text-align: left; }';
+
+// (0) check for IE
+// (1) innerHTML fails here
+css.styleSheet ? css.styleSheet.cssText = styles : css.appendChild(document.createTextNode(styles)); 
+
+document.getElementsByTagName("head")[0].appendChild(css);
+```
 
 - Keep in mind differences in performance of `textContent` and `innerText`, test them before use
 
