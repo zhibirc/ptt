@@ -252,3 +252,9 @@ they’re bound to are about to be removed;
 ### Additional reading
 
 [Optimization killers](https://github.com/petkaantonov/bluebird/wiki/Optimization-killers)
+
+### NB
+
+Doing too much can be as harmful as not doing anything. Too much of a good thing is a bad thing, so avoid _over-optimization_.
+> If you optimize everything, you will always be unhappy.
+**Donald Knuth**
