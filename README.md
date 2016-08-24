@@ -286,9 +286,9 @@ when key set becomes sparse (be aware that accessing elements in them is much sl
   
 ### Additional reading
 
-[Optimization killers](https://github.com/petkaantonov/bluebird/wiki/Optimization-killers)
-[Explaining JavaScript VMs in JavaScript - Inline Caches](http://mrale.ph/blog/2012/06/03/explaining-js-vms-in-js-inline-caches.html)
-[Writing Fast, Memory-Efficient JavaScript](https://www.smashingmagazine.com/2012/11/writing-fast-memory-efficient-javascript/)
+- [Optimization killers](https://github.com/petkaantonov/bluebird/wiki/Optimization-killers)
+- [Explaining JavaScript VMs in JavaScript - Inline Caches](http://mrale.ph/blog/2012/06/03/explaining-js-vms-in-js-inline-caches.html)
+- [Writing Fast, Memory-Efficient JavaScript](https://www.smashingmagazine.com/2012/11/writing-fast-memory-efficient-javascript/)
 
 ### NB
 
