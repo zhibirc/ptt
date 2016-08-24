@@ -1,3 +1,4 @@
+![JS Logo](performance.jpg)
 # ptt
 ## Performance Tips and Tricks for effective development on JavaScript
 
