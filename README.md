@@ -117,22 +117,24 @@ function listAsyncExec (list, executor, interval, context) {
 - in addition to previous note use _Daff's device_ loops unwinding/unrolling in loops with huge amount of iterations ([link](http://jsperf.com/duffs-device)):
 
 ```javascript
-var testVal = 0;
-var n = iterations % 8;
-while (n--) {
- testVal++;
-}
+var value = 0,
+    n = iterations % 8;
+    
+while ( n-- ) value += 1;
 
 n = (iterations * 0.125) ^ 0; //multiplication is faster than division in some cases
-while (n--) {
- testVal++;
- testVal++;
- testVal++;
- testVal++;
- testVal++;
- testVal++;
- testVal++;
- testVal++;
+
+while ( n ) {
+	value += 1;
+	value += 1;
+	value += 1;
+	value += 1;
+	value += 1;
+	value += 1;
+	value += 1;
+	value += 1;
+	
+	n -= 1;
 }
 ```
 
@@ -209,7 +211,7 @@ function evalFactorial (n) {
 };
 ```
 
-- to prevent memory fragmentation and slower access to array members use instant memory allocation for large array:
+- to prevent memory fragmentation and slower access to array members use instant memory allocation for large array (depends on JavaScript engine):
 
 ```javascript
 var db = Array(1e6);
@@ -250,15 +252,48 @@ being stored that you’re unlikely to reuse;
 they’re bound to are about to be removed;
 
 - keep your functions _monomorphic_ ([link](http://mrale.ph/blog/2015/01/11/whats-up-with-monomorphism.html));
+
+- don’t write enormous functions, as they are more difficult to optimize;
+
+- in cases when you need a bunch of numbers or similar (when you need vectors, for example) use arrays instead of objects;
+
+- when you need to copy objects in a performance-critical code (and you can’t get out of this situation), use an array 
+or a custom “copy constructor” function which copies each property explicitly. This is probably the fastest way to do it:
+
+```javascript
+function Clone(original) {
+  this.foo = original.foo;
+  this.bar = original.bar;
+}
+var copy = new Clone(original);
+```
+
+- caching your functions when using the module pattern can lead to performance improvements:
+
+```javascript
+var fn_0 = function () {},
+    fn_1 = function () {},
+    Constructor = function () {
+      return {
+          method_0: fn_0,
+          method_1: fn_1
+      }
+  }
+```
+
+- in general, don’t delete array elements. It would make the array transition to a slower internal representation 
+when key set becomes sparse (be aware that accessing elements in them is much slower than in full arrays);
   
 ### Additional reading
 
 [Optimization killers](https://github.com/petkaantonov/bluebird/wiki/Optimization-killers)
 [Explaining JavaScript VMs in JavaScript - Inline Caches](http://mrale.ph/blog/2012/06/03/explaining-js-vms-in-js-inline-caches.html)
+[Writing Fast, Memory-Efficient JavaScript](https://www.smashingmagazine.com/2012/11/writing-fast-memory-efficient-javascript/)
 
 ### NB
 
-Doing too much can be as harmful as not doing anything. Too much of a good thing is a bad thing, so avoid _over-optimization_.
+Doing too much can be as harmful as not doing anything. Too much of a good thing is a bad thing, so avoid _over-optimization_. 
+Modern JavaScript engines does many optimizations automatically and some kinds of techniques can potentially “cancel” some of them.
 
 > If you optimize everything, you will always be unhappy.
 
