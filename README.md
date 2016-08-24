@@ -243,6 +243,12 @@ and will not be garbage collected;
   
 - global variables are not cleaned up by the garbage collector during the life of your page, it's yet another reason to avoid them;
 
+- if you’re using a data cache locally, make sure to clean that cache or use an aging mechanism to avoid large chunks of data 
+being stored that you’re unlikely to reuse;
+
+- ensure that you’re unbinding event listeners where they are no longer required, especially when the DOM objects 
+they’re bound to are about to be removed;
+  
 ### Additional reading
 
 [Optimization killers](https://github.com/petkaantonov/bluebird/wiki/Optimization-killers)
