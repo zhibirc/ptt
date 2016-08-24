@@ -10,6 +10,8 @@ Some of them have links to tests and other additional information._
 considers: "Always cache DOM values that are used more than once to avoid a performance penalty";
 
 - perform as many changes as possible outside of the live DOM structure;
+
+- event delegation is typically more performant than binding each element individually, so use it;
  
 - alternative way to avoid unnecessary _reflow_, one of the most expensive functions of a browser, is to remove a node 
 from the live DOM before operating on it. You can remove a node from the live DOM in two ways:
@@ -93,9 +95,8 @@ console.log(map[weight]);
 
 - prefer `call` rather than `apply`, as `call` is slightly faster;
 
-- use cloning objects istead of creating (`element.cloneNode()` instead of `document.createElement(element)`).
-
-Links: [link](https://github.com/spicyj/innerhtml-vs-createelement-vs-clonenode) [link](https://jsperf.com/clonenode-vs-createelement-performance/58)
+- use cloning objects istead of creating (`element.cloneNode()` instead of `document.createElement(element)`) ([link](https://github.com/spicyj/innerhtml-vs-createelement-vs-clonenode), 
+[link](https://jsperf.com/clonenode-vs-createelement-performance/58));
 
 - avoid performance pitfalls with _long running scrips_ with the following technique (use this if the loop doesn't have to execute 
 synchronously and the order in which the loop’s data is processed in no matter:
@@ -113,7 +114,7 @@ function listAsyncExec (list, executor, interval, context) {
 
 - multiplication is faster than division in some cases, so you can increase performance of expression (`n / 8`) with (`n * 0.125`);
 
-- in addition to previous note use _Daff's device_ loops unwinding/unrolling in loops with huge amount of iterations:
+- in addition to previous note use _Daff's device_ loops unwinding/unrolling in loops with huge amount of iterations ([link](http://jsperf.com/duffs-device)):
 
 ```javascript
 var testVal = 0;
@@ -134,7 +135,6 @@ while (n--) {
  testVal++;
 }
 ```
-[link](http://jsperf.com/duffs-device)
 
 - use `Date.now()` instead of `+new Date` or `(new Date).getTime()`;
 
@@ -248,10 +248,13 @@ being stored that you’re unlikely to reuse;
 
 - ensure that you’re unbinding event listeners where they are no longer required, especially when the DOM objects 
 they’re bound to are about to be removed;
+
+- keep your functions _monomorphic_ ([link](http://mrale.ph/blog/2015/01/11/whats-up-with-monomorphism.html));
   
 ### Additional reading
 
 [Optimization killers](https://github.com/petkaantonov/bluebird/wiki/Optimization-killers)
+[Explaining JavaScript VMs in JavaScript - Inline Caches](http://mrale.ph/blog/2012/06/03/explaining-js-vms-in-js-inline-caches.html)
 
 ### NB
 
