@@ -93,9 +93,8 @@ console.log(map[weight]);
 
 - prefer `call` rather than `apply`, as `call` is slightly faster;
 
-- use cloning objects istead of creating (`element.cloneNode()` instead of `document.createElement(element)`). Links:
-[link](https://github.com/spicyj/innerhtml-vs-createelement-vs-clonenode)
-[link](https://jsperf.com/clonenode-vs-createelement-performance/58)
+- use cloning objects istead of creating (`element.cloneNode()` instead of `document.createElement(element)`).
+Links: [link](https://github.com/spicyj/innerhtml-vs-createelement-vs-clonenode) [link](https://jsperf.com/clonenode-vs-createelement-performance/58)
 
 - avoid performance pitfalls with _long running scrips_ with the following technique (use this if the loop doesn't have to execute 
 synchronously and the order in which the loop’s data is processed in no matter:
