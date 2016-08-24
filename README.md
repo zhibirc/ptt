@@ -159,8 +159,52 @@ document.getElementsByTagName("head")[0].appendChild(css);
 
 - Keep in mind differences in performance of `textContent` and `innerText`, test them before use
 
-### Additional literature
+- If the functions in your application tend to be run again and again, the performance improvement will be greater 
+than if many different functions tend to run only once, so use function wrappers only for repeated code blocks
 
-Stoyan Stefanov "JavaSctipt Design Patterns"
-Nicholas Zakas "High performant JavaScript"
-Douglas Crockford "JavaScript: the good parts"
+- `setTimeout(some_code, 0)` doesn't guarantee the zero delay due to various environment implementations, so 
+for purposes when you want to use minimal timeout for async execution of some piece of code you can use:
+
+```javascript
+setZeroTimeout = (function () {
+	var fn, ctx;
+
+	window.addEventListener('message', function () {
+		fn && fn.call(ctx); 
+	});
+
+	return function (_fn, _ctx) {
+		fn = _fn;
+		ctx = _ctx;
+		window.postMessage('', '*');
+	};
+}());
+```
+
+- Remember about _tail call optimization_, for example:
+
+```javascript
+function evalFactorial (n) {
+	function _(n, acc) {
+		return n < 2 ? acc : _(n - 1, n * acc);
+	}
+	 
+	return _(n, 1);
+};
+```
+
+- To prevent memory fragmentation and slower access to array members use instant memory allocation for large array:
+
+```javascript
+var db = Array(1e6);
+```
+
+- You can save some memory by using one less variable when swapping values, compare:
+
+```javascript
+var c = a; a = b; b = c;
+a ^= b; b ^= a; a ^= b;
+```
+
+- Use _memoization_ as a useful optimization technique for caching the results of function calls 
+such that lengthy lookups or expensive recursive computations can be minimized where possible
