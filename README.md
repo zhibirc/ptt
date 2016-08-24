@@ -10,30 +10,37 @@ Some of them have links to tests and other additional information._
 
 Advices as for caching elements are make sense in case multiple usages and/or long prototype chain
 	
-- Cache DOM elements
+- Cache DOM elements:
 
 ```javascript
-var doc = document;
+var doc = document,
+    div = doc.getElementById('id_0'),
+    p   = doc.getElementById('id_1');
 ```
 
-- Cache repeatedly evaluated properties
+- Cache repeatedly evaluated properties:
 
 ```javascript
 var len = list.length;
 ```
 
-- Cache function references, property values
+- Cache function references, property values:
 
 ```javascript
-var hasOwn = Object.hasOwnProperty
+var hasOwn = Object.hasOwnProperty;
 ```
 
 - Use additional/subtractional/... assignment ( `+=`, `-=`, ...) instead increment/decrement (`++`, `--`). 
-It does the same things more straightforward and hasn't ambiguous behavior (prefix and postfix notation of increment/decrement)
+It does the same things more straightforward and hasn't ambiguous behaviour (prefix and postfix notation of increment/decrement)
+Oh yeah, and it's almost twice as fast in Gecko and slightly faster in WebKit.
 
-- Avoid global variables or store the copies in local scopes
+- Avoid global variables or store the copies in local scope to avoid digging into scope chain
 
-- Avoid long prototype inheritance
+- Avoid long prototype inheritance. Sometimes it's useful to use so-called _dict pattern_ and create objects without prototype chain which prevents undesired property lookups:
+
+```javascript
+var obj = Object.create(null);
+```
 
 - Avoid to change prototype chain in runtime
 
@@ -47,7 +54,7 @@ It does the same things more straightforward and hasn't ambiguous behavior (pref
 	
 - for-in loop is very, very slow, use `Object.keys` + `forEach`/`for`/`while`
 	
-- Use bitwise operators ( 4 / 2 === 4 >> 1, 4 * 2 === 4 << 1, ~~ for rounding etc.). It may be less readable but sometimes increase performance
+- Use bitwise operators ( `4 / 2 === 4 >> 1`, `4 * 2 === 4 << 1`, `~~` for rounding etc.). It may be less readable but sometimes increase performance
 	
 - Avoid using captured groups in regular expressions if you don't want to save result of matching,
 use `(?:)` - non-capturing groups instead
@@ -62,17 +69,42 @@ use `(?:)` - non-capturing groups instead
 
 - Use `switch-case` construction instead of large `if-else` structure
 
+- Use mapping instead of `switch-case` in case of simple data accessing for elegance and performance:
+
+```javascript
+var weight = 'some',
+    map = {
+        light: '2kg',
+        middle: '4kg',
+        heavy: '6kg'
+    };
+
+console.log(map[weight]);
+```
+
 - Prefer `call` rather than `apply`, as `call` is slightly faster
 
-- Use cloning objects istead of creating (`element.cloneNode()` instead of `document.createElement(element)`)
-
-Link:
+- Use cloning objects istead of creating (`element.cloneNode()` instead of `document.createElement(element)`). Links:
 https://github.com/spicyj/innerhtml-vs-createelement-vs-clonenode
 https://jsperf.com/clonenode-vs-createelement-performance/58
 
-- Multiplication is faster than division in some cases, so you can increase performance of expression (n / 8) with (n * 0.125)
+- Avoid performance pitfalls with _long running scrips_ with the following technique (use this if the loop doesn't have to execute synchronously and 
+the order in which the loop’s data is processed in no matter:
 
-- In addition to previous note use Daff's device loops unwinding/unrolling in loops with huge amount of iterations
+```javascript
+function listAsyncExec (list, executor, interval, context) {
+    var list = list.slice();
+    setTimeout(function _() {
+        executor.call(context, list.shift());
+        
+        list.length && setTimeout(_, interval);
+    }, interval);
+}
+```
+
+- Multiplication is faster than division in some cases, so you can increase performance of expression (`n / 8`) with (`n * 0.125`)
+
+- In addition to previous note use _Daff's device_ loops unwinding/unrolling in loops with huge amount of iterations:
 
 ```javascript
 var testVal = 0;
@@ -100,6 +132,30 @@ Link: http://jsperf.com/duffs-device
 - Don’t use the `with()` statement
 
 - For clearing arrays use `array.length = 0`, not `array.splice(0)`
+
+- Define arrays for HTML collection objects
+As the DOM Level 1 spec says, "collections in the HTML DOM are assumed to be live, meaning that they are automatically updated when the underlying document is changed". 
+HTML collection objects are extremely slow, so use any valid technique to minimize amount of operations with them.
+
+- Don't touching the DOM without real necessity, use `documentFragment` or other technique which minimize amount of _reflows_
+
+- Use CSS classes instead of individual styles to change a number of styles at once, which incurs a single _reflow_
+
+- If it's necessary to define sufficient amount of styles in runtime the approach below is appropriate (or use external CSS file via `link`):
+
+```javascript
+var css = document.createElement('style'),
+    styles = '#header { color: #555 }';
+    
+css.media = 'screen'; // if necessary
+styles += ' #content { color: #333; text-align: left; }';
+
+// (0) check for IE
+// (1) innerHTML fails here
+css.styleSheet ? css.styleSheet.cssText = styles : css.appendChild(document.createTextNode(styles)); 
+
+document.getElementsByTagName("head")[0].appendChild(css);
+```
 
 - Keep in mind differences in performance of `textContent` and `innerText`, test them before use
 
