@@ -9,6 +9,8 @@ Some of them have links to tests and other additional information._
 - advices as for caching elements are make sense in case multiple usages and/or long prototype chain. For example, Nicholas Zakas 
 considers: "Always cache DOM values that are used more than once to avoid a performance penalty";
 
+- cache template’s raw text and/or pre-compiled version of the template (if you’re using HTML templates);
+
 - perform as many changes as possible outside of the live DOM structure;
 
 - event delegation is typically more performant than binding each element individually, so use it;
