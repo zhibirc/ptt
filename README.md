@@ -211,7 +211,7 @@ function evalFactorial (n) {
 };
 ```
 
-- to prevent memory fragmentation and slower access to array members use instant memory allocation for large array (depends on JavaScript engine):
+- to prevent memory fragmentation and slower access to array members use instant memory allocation for large array (efficiency depends on JavaScript engine):
 
 ```javascript
 var db = Array(1e6);
