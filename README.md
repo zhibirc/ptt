@@ -144,6 +144,10 @@ while ( n ) {
 
 - don’t use the `with()` statement;
 
+- use `try {} catch (ex) {}` with caution. This creates what is known as a _dynamic scope_, similar to the effect of the `with` 
+statement. Some JavaScript engines, such as **V8** do not optimize functions that make use of a `try/catch` block as the optimizing 
+compiler will skip it when encountered;
+
 - for clearing arrays use `array.length = 0`, not `array.splice(0)`;
 
 - define arrays for HTML collection objects
@@ -285,6 +289,16 @@ var fn_0 = function () {},
 
 - in general, don’t delete array elements. It would make the array transition to a slower internal representation 
 when key set becomes sparse (be aware that accessing elements in them is much slower than in full arrays);
+
+- try to eliminate dead code;
+
+- only some patterns in `arguments` usage are supported for optimized code (at least in **V8**):
+
+```javascript
+arguments.length
+arguments[i]
+f.apply(obj, arguments)
+```
   
 ### Additional reading
 
