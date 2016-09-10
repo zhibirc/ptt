@@ -292,7 +292,7 @@ when key set becomes sparse (be aware that accessing elements in them is much sl
 
 - try to eliminate dead code;
 
-- breaking a bigger function into smaller pieces could help to reduce compilation time;
+- breaking a bigger function into smaller pieces could help to reduce compilation time. In addition, ability of _inlining_ (i.e. replacing a function call site with the body of the callee), for example, in **Crankshaft** (**V8** optimizing compiler), depends on the amount of characters in a function or callback, which is equal 600 (maximum source size in bytes considered for a single _inlining_) by default. There is an option for **Node V8** called `--max_inlined_source_size` (you can tweak it). Latter is especially important for callable objects that are called repeatedly;
 
 - only some patterns in `arguments` usage are supported for optimized code (at least in **V8**):
 
