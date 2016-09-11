@@ -261,7 +261,17 @@ they’re bound to are about to be removed;
 
 - don’t write enormous functions, as they are more difficult to optimize;
 
-- in cases when you need a bunch of numbers or similar (when you need vectors, for example) use arrays instead of objects;
+- in cases when you need a bunch of numbers or similar (when you need vectors, for example) use arrays instead of objects.
+So, it's not a good idea to mix values of different types (e.g. numbers, strings, undefined or true/false) in the same array
+(i.e. `var arr = [1, '1', undefined, true, 'true']`) See [link](http://web.archive.org/web/20160203020622/http://jsperf.com:80/type-inference-performance/2);
+
+- using `delete` for array elements causes appearing "holes" (empty slots) in them. **V8** works with "holey" arrays much slower than with "packed" ones:
+
+```javascript
+var list = [1, 2, 3];
+delete list[1]; // bad, makes "hole" and length isn't changed
+list.splice(1, 1); // good, length decrements by 1 and array still "packed"
+```
 
 - when you need to copy objects in a performance-critical code (and you can’t get out of this situation), use an array
 or a custom “copy constructor” function which copies each property explicitly. This is probably the fastest way to do it:
