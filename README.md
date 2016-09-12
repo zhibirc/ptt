@@ -155,6 +155,18 @@ As the DOM Level 1 spec says, "collections in the HTML DOM are assumed to be liv
 when the underlying document is changed". HTML collection objects are extremely slow, so use any valid technique to minimize
 amount of operations with them;
 
+- keep in mind the difference in performance between DOM methods who get live HTMLCollection and those who get snapshot:
+
+```javascript
+var dynamicTagList = document.getElementsByTagName('div'); // live
+var staticTagList = document.querySelectorAll('div'); // snapshot
+var dynamicClassList = document.getElementsByClassName('some'); // live
+var staticClassList = document.querySelectorAll('some'); // snapshot
+```
+
+Live `NodeList` objects can be created and returned faster by the browser because they don’t have to have all of the information up front
+while static `NodeList`s need to have all of their data from the start.
+
 - don't touching the DOM without real necessity, use `documentFragment` or other technique which minimize amount of _reflows_;
 
 - use CSS classes instead of individual styles to change a number of styles at once, which incurs a single _reflow_;
